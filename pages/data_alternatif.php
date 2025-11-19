@@ -10,16 +10,15 @@ if (isset($_POST['simpan'])) {
     exit;
   }
     $equipment_name = $_POST['equipment_name'];
-    $id_equipment_class = $_POST['id_equipment_class'];
     $id_grade = $_POST['id_grade'];
     $id_plant = $_POST['id_plant'];
     $id_classification = $_POST['id_classification'];
     $id_inspection_period = $_POST['id_inspection_period'];
 
     $query = "INSERT INTO equipment 
-              (equipment_name, id_equipment_class, id_grade, id_plant, id_classification, id_inspection_period)
-              VALUES 
-              ('$equipment_name', '$id_equipment_class', '$id_grade', '$id_plant', '$id_classification', '$id_inspection_period')";
+          (equipment_name, id_grade, id_plant, id_classification, id_inspection_period)
+          VALUES 
+          ('$equipment_name', '$id_grade', '$id_plant', '$id_classification', '$id_inspection_period')";
 
     $result = mysqli_query($koneksi, $query);
 
@@ -32,22 +31,18 @@ if (isset($_POST['simpan'])) {
             $id_criteria = $kr['id_criteria'];
             $nilai = 0;
             $cname = strtolower(trim($kr['criteria_name']));
-            if ($cname == 'equipment class') {
-                $q = $koneksi->query("SELECT equipment_class_point FROM equipment_class WHERE id_equipment_class='$id_equipment_class'");
-                $d = $q->fetch_assoc();
-                $nilai = $d ? $d['equipment_class_point'] : 0;
-            } elseif ($cname == 'grade') {
-                $q = $koneksi->query("SELECT grade_point FROM grade WHERE id_grade='$id_grade'");
-                $d = $q->fetch_assoc();
-                $nilai = $d ? $d['grade_point'] : 0;
+            if ($cname == 'grade') {
+              $q = $koneksi->query("SELECT grade_point FROM grade WHERE id_grade='$id_grade'");
+              $d = $q->fetch_assoc();
+              $nilai = $d ? $d['grade_point'] : 0;
             } elseif ($cname == 'classification') {
-                $q = $koneksi->query("SELECT classification_point FROM classification WHERE id_classification='$id_classification'");
-                $d = $q->fetch_assoc();
-                $nilai = $d ? $d['classification_point'] : 0;
+              $q = $koneksi->query("SELECT classification_point FROM classification WHERE id_classification='$id_classification'");
+              $d = $q->fetch_assoc();
+              $nilai = $d ? $d['classification_point'] : 0;
             } elseif ($cname == 'inspection period') {
-                $q = $koneksi->query("SELECT period_point FROM inspection_period WHERE id_inspection_period='$id_inspection_period'");
-                $d = $q->fetch_assoc();
-                $nilai = $d ? $d['period_point'] : 0;
+              $q = $koneksi->query("SELECT period_point FROM inspection_period WHERE id_inspection_period='$id_inspection_period'");
+              $d = $q->fetch_assoc();
+              $nilai = $d ? $d['period_point'] : 0;
             }
             // Insert ke penilaian
             $insert = $koneksi->query("INSERT INTO penilaian (id_equipment, id_criteria, nilai) VALUES ('$id_equipment', '$id_criteria', '$nilai')");
@@ -63,10 +58,9 @@ if (isset($_POST['simpan'])) {
 
 // === QUERY UNTUK TABEL ===
 $query = "SELECT e.id_equipment, e.equipment_name,
-                 ec.class_name, g.grade_name, p.plant_name,
+                 g.grade_name, p.plant_name,
                  c.classification_name, ip.period_name
           FROM equipment e
-          JOIN equipment_class ec ON e.id_equipment_class = ec.id_equipment_class
           JOIN grade g ON e.id_grade = g.id_grade
           JOIN plant p ON e.id_plant = p.id_plant
           JOIN classification c ON e.id_classification = c.id_classification
@@ -74,7 +68,6 @@ $query = "SELECT e.id_equipment, e.equipment_name,
 $result = mysqli_query($koneksi, $query);
 
 // === DROPDOWN DATA RELASI ===
-$equipment_class = mysqli_query($koneksi, "SELECT * FROM equipment_class");
 $grade = mysqli_query($koneksi, "SELECT * FROM grade");
 $plant = mysqli_query($koneksi, "SELECT * FROM plant");
 $classification = mysqli_query($koneksi, "SELECT * FROM classification");
@@ -105,15 +98,7 @@ $inspection_period = mysqli_query($koneksi, "SELECT * FROM inspection_period");
           <input type="text" name="equipment_name" class="form-control" required>
         </div>
 
-        <div class="col-md-4">
-          <label>Kelas Equipment</label>
-          <select name="id_equipment_class" class="form-select" required>
-            <option value="">-- Pilih Class --</option>
-            <?php while($row=mysqli_fetch_assoc($equipment_class)) { ?>
-              <option value="<?= $row['id_equipment_class'] ?>"><?= $row['class_name'] ?></option>
-            <?php } ?>
-          </select>
-        </div>
+        
 
         <div class="col-md-4">
           <label>Grade</label>
@@ -172,7 +157,6 @@ $inspection_period = mysqli_query($koneksi, "SELECT * FROM inspection_period");
         <tr>
           <th>No</th>
           <th>Nama Equipment</th>
-          <th>Kelas</th>
           <th>Grade</th>
           <th>Plant</th>
           <th>Classification</th>
@@ -184,7 +168,6 @@ $inspection_period = mysqli_query($koneksi, "SELECT * FROM inspection_period");
         <tr>
           <td><?= $no++ ?></td>
           <td><?= $row['equipment_name'] ?></td>
-          <td><?= $row['class_name'] ?></td>
           <td><?= $row['grade_name'] ?></td>
           <td><?= $row['plant_name'] ?></td>
           <td><?= $row['classification_name'] ?></td>

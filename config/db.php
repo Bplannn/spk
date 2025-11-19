@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";
 $pass = "";
-$db   = "sistem_penunjang_keputusan2";
+$db   = "spk2";
 
 $koneksi = new mysqli($host, $user, $pass, $db);
 if ($koneksi->connect_error) {

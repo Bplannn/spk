@@ -8,7 +8,6 @@ if (empty($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
 // collect filters
 $filters = [];
 $where = [];
-if(!empty($_POST['id_equipment_class'])) { $filters['id_equipment_class'] = (int)$_POST['id_equipment_class']; $where[] = "e.id_equipment_class=".$filters['id_equipment_class']; }
 if(!empty($_POST['id_grade'])) { $filters['id_grade'] = (int)$_POST['id_grade']; $where[] = "e.id_grade=".$filters['id_grade']; }
 if(!empty($_POST['id_plant'])) { $filters['id_plant'] = (int)$_POST['id_plant']; $where[] = "e.id_plant=".$filters['id_plant']; }
 if(!empty($_POST['id_classification'])) { $filters['id_classification'] = (int)$_POST['id_classification']; $where[] = "e.id_classification=".$filters['id_classification']; }
@@ -17,7 +16,13 @@ $where_sql = '';
 if(count($where)>0) $where_sql = 'WHERE '.implode(' AND ', $where);
 
 // get equipments matching filter
-$sql = "SELECT e.id_equipment, e.equipment_name FROM equipment e $where_sql";
+$sql = "SELECT e.id_equipment, e.equipment_name, e.id_grade, e.id_classification, e.id_inspection_period,
+			   g.grade_point, c.classification_point, ip.period_point
+		  FROM equipment e
+		  LEFT JOIN grade g ON e.id_grade = g.id_grade
+		  LEFT JOIN classification c ON e.id_classification = c.id_classification
+		  LEFT JOIN inspection_period ip ON e.id_inspection_period = ip.id_inspection_period
+		  $where_sql";
 $res = $koneksi->query($sql);
 $items = [];
 while($r=$res->fetch_assoc()) $items[] = $r;
@@ -41,7 +46,19 @@ foreach($items as $it){
 		$s->bind_param("ii", $id, $cid);
 		$s->execute();
 		$res2 = $s->get_result()->fetch_assoc();
-		$matrix[$id]['raw'][$cid] = $res2 ? (float)$res2['nilai'] : 0;
+		$val = $res2 ? (float)$res2['nilai'] : 0;
+		// fallback to relational subcriteria points when penilaian is missing or zero
+		if(empty($val)){
+			$cname = strtolower(trim($criteria[$cid]['criteria_name']));
+			if(strpos($cname,'grade') !== false){
+				$val = isset($it['grade_point']) ? (float)$it['grade_point'] : 0;
+			} elseif(strpos($cname,'classification') !== false){
+				$val = isset($it['classification_point']) ? (float)$it['classification_point'] : 0;
+			} elseif(strpos($cname,'inspection') !== false || strpos($cname,'period') !== false){
+				$val = isset($it['period_point']) ? (float)$it['period_point'] : 0;
+			}
+		}
+		$matrix[$id]['raw'][$cid] = $val;
 	}
 }
 
@@ -83,7 +100,16 @@ $history_id = $koneksi->insert_id;
 // save results
 foreach($results as $id=>$score){
 	$details = $koneksi->real_escape_string(json_encode(['raw'=>$matrix[$id]['raw']]));
-	$koneksi->query("INSERT INTO compute_results (history_id, id_equipment, score, details) VALUES ($history_id, $id, $score, '$details')");
+	$sql = "INSERT INTO compute_results (history_id, id_equipment, score, details) VALUES ($history_id, $id, $score, '$details')";
+	$ok = $koneksi->query($sql);
+	if(!$ok){
+		// write debug info to log
+		$msg = date('Y-m-d H:i:s') . " | FAIL INSERT: history={$history_id} id={$id} score={$score} sql={$sql} error=" . $koneksi->error . "\n";
+		file_put_contents(__DIR__ . '/compute_debug.log', $msg, FILE_APPEND);
+	} else {
+		$msg = date('Y-m-d H:i:s') . " | OK INSERT: history={$history_id} id={$id} score={$score}\n";
+		file_put_contents(__DIR__ . '/compute_debug.log', $msg, FILE_APPEND);
+	}
 }
 
 // redirect to hasil page (detail)

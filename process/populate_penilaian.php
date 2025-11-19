@@ -23,11 +23,7 @@ while($e = $eq->fetch_assoc()){
 
         $nilai = 0;
         $cn = strtolower(trim($cname));
-        if(strpos($cn, 'equipment') !== false && strpos($cn, 'class') !== false){
-            $q = $koneksi->prepare("SELECT equipment_class_point FROM equipment_class WHERE id_equipment_class=?");
-            $q->bind_param('i', $e['id_equipment_class']); $q->execute(); $d = $q->get_result()->fetch_assoc();
-            $nilai = $d ? $d['equipment_class_point'] : 0;
-        } elseif(strpos($cn,'grade') !== false){
+        if(strpos($cn,'grade') !== false){
             $q = $koneksi->prepare("SELECT grade_point FROM grade WHERE id_grade=?");
             $q->bind_param('i', $e['id_grade']); $q->execute(); $d = $q->get_result()->fetch_assoc();
             $nilai = $d ? $d['grade_point'] : 0;

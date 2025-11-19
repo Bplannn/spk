@@ -8,15 +8,12 @@ include('../includes/sidebar.php');
 <h3>Data Perhitungan (Step by Step)</h3>
 
 <?php
-// fetch dropdown data for filters
-$equipment_class = $koneksi->query("SELECT * FROM equipment_class");
 $grade = $koneksi->query("SELECT * FROM grade");
 $plant = $koneksi->query("SELECT * FROM plant");
 $classification = $koneksi->query("SELECT * FROM classification");
 $inspection_period = $koneksi->query("SELECT * FROM inspection_period");
 
 // get current filter values (from GET for preview)
-$f_class = $_GET['id_equipment_class'] ?? '';
 $f_grade = $_GET['id_grade'] ?? '';
 $f_plant = $_GET['id_plant'] ?? '';
 $f_classification = $_GET['id_classification'] ?? '';
@@ -25,12 +22,6 @@ $f_period = $_GET['id_inspection_period'] ?? '';
 
 <!-- Filter form (preview) -->
 <form method="get" class="row g-2 mb-3">
-  <div class="col-md-2">
-    <select name="id_equipment_class" class="form-select">
-      <option value="">-- Semua Class --</option>
-      <?php foreach($equipment_class as $ec) { $sel = ($f_class== $ec['id_equipment_class'])? 'selected':''; echo "<option value='{$ec['id_equipment_class']}' $sel>{$ec['class_name']}</option>"; } ?>
-    </select>
-  </div>
   <div class="col-md-2">
     <select name="id_grade" class="form-select">
       <option value="">-- Semua Grade --</option>
@@ -63,7 +54,6 @@ $f_period = $_GET['id_inspection_period'] ?? '';
 <!-- Compute button (admin only) -->
 <?php if(isset($_SESSION['role']) && $_SESSION['role']==='admin'): ?>
   <form method="post" action="../process/compute_saw.php" class="mb-3">
-    <input type="hidden" name="id_equipment_class" value="<?=htmlspecialchars($f_class)?>">
     <input type="hidden" name="id_grade" value="<?=htmlspecialchars($f_grade)?>">
     <input type="hidden" name="id_plant" value="<?=htmlspecialchars($f_plant)?>">
     <input type="hidden" name="id_classification" value="<?=htmlspecialchars($f_classification)?>">
@@ -75,7 +65,6 @@ $f_period = $_GET['id_inspection_period'] ?? '';
 <?php
 // ambil semua equipment beserta nilai kriterianya langsung dari relasi (dengan filter jika ada)
 $whereClauses = [];
-if($f_class) $whereClauses[] = "e.id_equipment_class=".(int)$f_class;
 if($f_grade) $whereClauses[] = "e.id_grade=".(int)$f_grade;
 if($f_plant) $whereClauses[] = "e.id_plant=".(int)$f_plant;
 if($f_classification) $whereClauses[] = "e.id_classification=".(int)$f_classification;
@@ -86,12 +75,10 @@ $q = $koneksi->query("SELECT
     e.id_equipment,
     e.equipment_name,
     g.grade_point,
-    ec.equipment_class_point AS class_point,
     c.classification_point,
     ip.period_point
   FROM equipment e
   LEFT JOIN grade g ON e.id_grade = g.id_grade
-  LEFT JOIN equipment_class ec ON e.id_equipment_class = ec.id_equipment_class
   LEFT JOIN classification c ON e.id_classification = c.id_classification
   LEFT JOIN inspection_period ip ON e.id_inspection_period = ip.id_inspection_period
   $whereSql");
@@ -111,8 +98,6 @@ foreach($items as $it){
   foreach($criteria as $key=>$meta){
     switch (strtolower($key)) {
       case 'grade': $matrix[$id]['raw'][$key] = $it['grade_point']; break;
-      case 'equipment class':
-      case 'class': $matrix[$id]['raw'][$key] = $it['class_point']; break;
       case 'classification': $matrix[$id]['raw'][$key] = $it['classification_point']; break;
       case 'inspection period':
       case 'period': $matrix[$id]['raw'][$key] = $it['period_point']; break;

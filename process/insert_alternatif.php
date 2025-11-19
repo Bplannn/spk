@@ -1,9 +1,8 @@
 <?php
 include '../config/db.php';
 $query = "SELECT e.id_equipment, e.equipment_name,
-                 ec.class_name, g.grade_name, p.plant_name, ip.period_name
+                 g.grade_name, p.plant_name, ip.period_name
           FROM equipment e
-          JOIN equipment_class ec ON e.id_equipment_class = ec.id_equipment_class
           JOIN grade g ON e.id_grade = g.id_grade
           JOIN plant p ON e.id_plant = p.id_plant
           JOIN inspection_period ip ON e.id_inspection_period = ip.id_inspection_period";
