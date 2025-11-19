@@ -77,3 +77,28 @@ a.card-link:hover .card {
     display: none;
   }
 }
+
+/* Print helpers: hide navigation and controls when printing, keep page content visible */
+@media print {
+  /* hide navigation, sidebar and explicit no-print elements */
+  nav, .sidebar, .sidebar-toggle, .no-print, .btn, .btn-sm { display: none !important; }
+
+  /* make main content/container full-width for printing */
+  .container, .container-fluid, .col-10, .col-12 { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding: 0 5mm !important; }
+
+  /* ensure printable block shows and uses normal flow */
+  .printable { display: block !important; position: static !important; width: 100% !important; }
+
+  /* table rendering fixes for print */
+  .printable table { display: table !important; width: 100% !important; border-collapse: collapse !important; }
+  .printable thead { display: table-header-group !important; }
+  .printable tbody { display: table-row-group !important; }
+  .printable tr { display: table-row !important; }
+  .printable th, .printable td { display: table-cell !important; }
+
+  /* Reduce font-size slightly to help fit more rows on one page if needed */
+  .printable { font-size: 12px; }
+
+  /* Page margins */
+  @page { size: auto; margin: 8mm; }
+}

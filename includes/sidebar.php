@@ -2,7 +2,7 @@
 // sidebar column
 if (session_status() === PHP_SESSION_NONE) session_start();
 ?>
-<div class="col-2 bg-light sidebar vh-100 p-3">
+<div class="col-2 bg-light sidebar vh-100 p-3 no-print">
   <h4>Menu</h4>
   <ul class="nav flex-column">
     <li class="nav-item"><a class="nav-link" href="/SPK_Maintenance/pages/dashboard.php">Dashboard</a></li>

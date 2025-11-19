@@ -12,8 +12,9 @@ if (!empty($_GET['history_id'])) {
   $h = $koneksi->query("SELECT * FROM compute_history WHERE id_history=$hid")->fetch_assoc();
   if (!$h) { echo "<div class='alert alert-warning'>History tidak ditemukan.</div>"; }
   else {
+    echo "<div class='no-print mb-2'><button class='btn btn-sm btn-outline-primary' onclick='window.print()'>Cetak</button></div>";
+    echo "<div class='printable'>";
     echo "<div class='mb-2'>Perhitungan oleh <strong>".htmlspecialchars($h['computed_by'])."</strong> pada <strong>".htmlspecialchars($h['computed_at'])."</strong></div>";
-    echo "<button class='btn btn-sm btn-outline-primary mb-2' onclick='window.print()'>Cetak</button>";
     echo "<table class='table table-bordered'><thead><tr><th>Rank</th><th>ID</th><th>Equipment</th><th>Score</th></tr></thead><tbody>";
     $q = $koneksi->query("SELECT cr.*, e.equipment_name FROM compute_results cr JOIN equipment e ON cr.id_equipment=e.id_equipment WHERE cr.history_id=$hid ORDER BY cr.score DESC");
     $rank = 1;
@@ -22,6 +23,7 @@ if (!empty($_GET['history_id'])) {
       $rank++;
     }
     echo "</tbody></table>";
+    echo "</div>"; // end printable
   }
 } else {
   // list history as date links
