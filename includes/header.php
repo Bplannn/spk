@@ -26,17 +26,10 @@ if (session_status() === PHP_SESSION_NONE) session_start();
   <div class="container-fluid">
     <a class="navbar-brand ms-3" href="/SPK_Maintenance/index.php">KeputusanEQU</a>
     <div class="ms-auto text-white">
-      <?php if(isset($_SESSION['username'])): ?>
-        <span class="me-3">Logged as: <strong><?=htmlspecialchars(
-          
-          
-        
-        
-        
-        
-        
-        
-        $_SESSION['nama_pengguna'])?></strong> (<?=htmlspecialchars($_SESSION['role'])?>)</span>
+      <?php if(isset($_SESSION['username'])):
+          $displayName = $_SESSION['nama_pengguna'] ?? $_SESSION['username'] ?? '';
+      ?>
+        <span class="me-3">Logged as: <strong><?=htmlspecialchars($displayName)?></strong> (<?=htmlspecialchars($_SESSION['role'] ?? '')?>)</span>
         <a href="/SPK_Maintenance/process/logout.php" class="btn btn-sm btn-light">Logout</a>
       <?php else: ?>
         <a href="/SPK_Maintenance/login.php" class="btn btn-sm btn-light">Login</a>
