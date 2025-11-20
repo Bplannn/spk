@@ -96,14 +96,18 @@ $last_inspection = mysqli_query($koneksi, "SELECT * FROM last_inspection ORDER B
 <body class="p-4">
   <div class="container">
     <h3>Data Alternatif (Equipment)</h3>
-    <!-- Back button: go to previous page or to dashboard if no history -->
+    <span class="welcome-pill">Daftar Equipment — Kelola data dan inspection item</span>
+    <!-- Back button -->
     <div class="mb-3">
-      <button type="button" class="btn btn-secondary" onclick="if(document.referrer) { window.history.back(); } else { window.location='/SPK_Maintenance/pages/dashboard.php'; }">&larr; Kembali</button>
+      <button type="button" class="btn btn-outline-secondary" onclick="window.location='dashboard.php';">&larr; Kembali</button>
     </div>
     
+
     <!-- Form Tambah -->
     <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-    <form method="POST" class="mt-3 mb-4">
+    <div class="card mb-4">
+      <div class="card-body">
+    <form method="POST" class="mt-3 mb-0">
       <div class="row">
         <div class="col-md-4">
           <label>Nama Equipment</label>
@@ -169,10 +173,12 @@ $last_inspection = mysqli_query($koneksi, "SELECT * FROM last_inspection ORDER B
         </div>
       </div>
 
-      <div class="mt-4">
-        <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
+          <div class="mt-4">
+            <button type="submit" name="simpan" class="btn btn-primary">Simpan</button>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
     <?php else: ?>
       <div class="alert alert-info">Anda login sebagai <strong><?=htmlspecialchars($_SESSION['username'] ?? 'Tamu')?></strong>. Anda hanya dapat melihat data.</div>
     <?php endif; ?>
@@ -184,7 +190,9 @@ $last_inspection = mysqli_query($koneksi, "SELECT * FROM last_inspection ORDER B
         <button class="btn btn-outline-secondary" type="submit">Search</button>
       </div>
     </form>
-    <table class="table table-bordered mt-4">
+    <div class="card">
+      <div class="card-body p-0">
+    <table class="table table-bordered mb-0">
       <thead class="table-dark">
         <tr>
           <th>No</th>
@@ -212,6 +220,8 @@ $last_inspection = mysqli_query($koneksi, "SELECT * FROM last_inspection ORDER B
         <?php } ?>
       </tbody>
     </table>
+      </div>
+    </div>
   </div>
 </body>
 </html>

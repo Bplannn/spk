@@ -4,6 +4,7 @@ include('../config/db.php'); include('../includes/header.php'); include('../incl
 
 <div class="container mt-4">
   <h3>Hasil Perhitungan</h3>
+  <span class="welcome-pill">Lihat riwayat perhitungan dan cetak hasil</span>
 
 <?php
 // Flash messages
@@ -33,7 +34,7 @@ if (!empty($_GET['history_id'])) {
       echo "</form>";
     }
     echo "</div>";
-    echo "<table class='table table-bordered'><thead><tr><th>Rank</th><th>ID</th><th>Equipment</th><th>Score</th></tr></thead><tbody>";
+    echo "<div class='card'><div class='card-body p-0'><table class='table table-bordered mb-0'><thead><tr><th>Rank</th><th>ID</th><th>Equipment</th><th>Score</th></tr></thead><tbody>";
     // use LEFT JOIN so results remain even if equipment row was deleted; fallback to name stored in details JSON
     $q = $koneksi->query("SELECT cr.* , e.equipment_name AS live_name FROM compute_results cr LEFT JOIN equipment e ON cr.id_equipment=e.id_equipment WHERE cr.history_id=$hid ORDER BY cr.score DESC");
     $rank = 1;
@@ -47,16 +48,16 @@ if (!empty($_GET['history_id'])) {
         if(is_array($det) && !empty($det['name'])) $displayName = htmlspecialchars($det['name']);
         else $displayName = '(deleted)';
       }
-      echo "<tr><td>$rank</td><td>{$row['id_equipment']}</td><td>".$displayName."</td><td>".round($row['score'],4)."</td></tr>";
+      echo "<tr><td>$rank</td><td>".$row['id_equipment']."</td><td>".$displayName."</td><td>".round($row['score'],4)."</td></tr>";
       $rank++;
     }
-    echo "</tbody></table>";
+    echo "</tbody></table></div></div>";
   }
 } else {
   // list history as date links
   echo "<h5>Riwayat Perhitungan</h5>";
   $qh = $koneksi->query("SELECT * FROM compute_history ORDER BY computed_at DESC");
-  echo "<ul class='list-group'>";
+  echo "<div class='card'><div class='card-body'><ul class='list-group list-group-flush'>";
   while($hh = $qh->fetch_assoc()){
     $date = $hh['computed_at'];
     $who = htmlspecialchars($hh['computed_by']);
@@ -73,7 +74,7 @@ if (!empty($_GET['history_id'])) {
     }
     echo "</li>";
   }
-  echo "</ul>";
+  echo "</ul></div></div>";
 }
 
 ?>

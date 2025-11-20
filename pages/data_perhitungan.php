@@ -6,6 +6,7 @@ include('../includes/sidebar.php');
 
 <div class="container mt-4">
 <h3>Data Perhitungan (Step by Step)</h3>
+<span class="welcome-pill">Lakukan perhitungan SAW — filter dan jalankan untuk melihat hasil</span>
 
 <?php
 $grade = $koneksi->query("SELECT * FROM grade");
@@ -24,7 +25,9 @@ $f_last = $_GET['id_last_inspection'] ?? '';
 ?>
 
 <!-- Filter form (preview) -->
-<form method="get" class="row g-2 mb-3">
+<div class="card mb-3">
+  <div class="card-body">
+    <form method="get" class="row g-2 mb-0">
   <div class="col-md-2">
     <select name="id_grade" class="form-select">
       <option value="">-- Semua Grade --</option>
@@ -58,11 +61,15 @@ $f_last = $_GET['id_last_inspection'] ?? '';
   <div class="col-md-2">
     <button class="btn btn-secondary">Tampilkan</button>
   </div>
-</form>
+    </form>
+  </div>
+</div>
 
 <!-- Compute button (admin only) -->
 <?php if(isset($_SESSION['role']) && $_SESSION['role']==='admin'): ?>
-    <form method="post" action="../process/compute_saw.php" class="mb-3">
+  <div class="card mb-3">
+    <div class="card-body">
+    <form method="post" action="../process/compute_saw.php" class="mb-0">
     <input type="hidden" name="id_grade" value="<?=htmlspecialchars($f_grade)?>">
     <input type="hidden" name="id_plant" value="<?=htmlspecialchars($f_plant)?>">
     <input type="hidden" name="id_classification" value="<?=htmlspecialchars($f_classification)?>">
@@ -73,7 +80,9 @@ $f_last = $_GET['id_last_inspection'] ?? '';
         <label class="form-check-label" for="purge_prev">Hapus hasil perhitungan sebelumnya</label>
       </div>
       <button class="btn btn-primary">Hitung (hanya data terfilter)</button>
-  </form>
+    </form>
+    </div>
+  </div>
 <?php endif; ?>
 
 <?php
@@ -159,9 +168,9 @@ foreach($matrix as $id=>$row){
   $results[$id]['name'] = $row['name'];
 }
 
-// tampilkan hasil
-echo "<h5>Matrix Nilai Awal</h5>
-<table class='table table-bordered table-sm'><thead><tr><th>Equipment</th>";
+// tampilkan hasil (dibungkus card agar rapi)
+echo "<div class='card mb-3'><div class='card-body'><h5 class='card-title'>Matrix Nilai Awal</h5>";
+echo "<div class='table-responsive'><table class='table table-bordered table-sm mb-0'><thead><tr><th>Equipment</th>";
 foreach($criteria as $k=>$m) echo "<th>{$m['criteria_name']}</th>";
 echo "</tr></thead><tbody>";
 foreach($matrix as $id=>$row){
@@ -169,10 +178,10 @@ foreach($matrix as $id=>$row){
   foreach($criteria as $k=>$m) echo "<td>{$row['raw'][$k]}</td>";
   echo "</tr>";
 }
-echo "</tbody></table>";
+echo "</tbody></table></div></div></div>";
 
-echo "<h5>Normalisasi</h5>
-<table class='table table-bordered table-sm'><thead><tr><th>Equipment</th>";
+echo "<div class='card mb-3'><div class='card-body'><h5 class='card-title'>Normalisasi</h5>";
+echo "<div class='table-responsive'><table class='table table-bordered table-sm mb-0'><thead><tr><th>Equipment</th>";
 foreach($criteria as $k=>$m) echo "<th>{$m['criteria_name']}</th>";
 echo "</tr></thead><tbody>";
 foreach($normalized as $id=>$vals){
@@ -180,10 +189,10 @@ foreach($normalized as $id=>$vals){
   foreach($criteria as $k=>$m) echo "<td>".round($vals[$k],4)."</td>";
   echo "</tr>";
 }
-echo "</tbody></table>";
+echo "</tbody></table></div></div></div>";
 
-echo "<h5>Bobot & Total</h5>
-<table class='table table-bordered table-sm'><thead><tr><th>Equipment</th>";
+echo "<div class='card mb-3'><div class='card-body'><h5 class='card-title'>Bobot & Total</h5>";
+echo "<div class='table-responsive'><table class='table table-bordered table-sm mb-0'><thead><tr><th>Equipment</th>";
 foreach($criteria as $k=>$m) echo "<th>{$m['criteria_name']} (w={$m['weight']})</th>";
 echo "<th>Total</th></tr></thead><tbody>";
 foreach($results as $id=>$res){
@@ -191,7 +200,7 @@ foreach($results as $id=>$res){
   foreach($criteria as $k=>$m) echo "<td>".round($res['weights'][$k],4)."</td>";
   echo "<td>".round($res['total'],4)."</td></tr>";
 }
-echo "</tbody></table>";
+echo "</tbody></table></div></div></div>";
 ?>
 </div>
 
