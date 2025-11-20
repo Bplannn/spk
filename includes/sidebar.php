@@ -15,10 +15,11 @@ if (session_status() === PHP_SESSION_NONE) session_start();
       <li class="nav-item"><a class="nav-link <?= $cur=='data_alternatif.php' ? 'active' : '' ?>" href="/SPK_Maintenance/pages/data_alternatif.php">🔧 Data Alternatif</a></li>
       <li class="nav-item"><a class="nav-link <?= $cur=='data_perhitungan.php' ? 'active' : '' ?>" href="/SPK_Maintenance/pages/data_perhitungan.php">🧮 Data Perhitungan</a></li>
       <li class="nav-item"><a class="nav-link <?= $cur=='data_hasil.php' ? 'active' : '' ?>" href="/SPK_Maintenance/pages/data_hasil.php">📈 Data Hasil Akhir</a></li>
-      <li class="nav-item"><a class="nav-link <?= $cur=='profil.php' ? 'active' : '' ?>" href="/SPK_Maintenance/pages/profil.php">⚙ Profil</a></li>
+      <li class="nav-item"><a class="nav-link <?= $cur=='profil.php' ? 'active' : '' ?>" href="/SPK_Maintenance/pages/profil.php">⚙️ Profil</a></li>
     <?php else: ?>
       <li class="nav-item"><a class="nav-link <?= $cur=='data_alternatif.php' ? 'active' : '' ?>" href="/SPK_Maintenance/pages/data_alternatif.php">🔧 Data Alternatif</a></li>
       <li class="nav-item"><a class="nav-link <?= $cur=='data_hasil.php' ? 'active' : '' ?>" href="/SPK_Maintenance/pages/data_hasil.php">📈 Data Hasil Akhir</a></li>
+      <li class="nav-item"><a class="nav-link <?= $cur=='profil.php' ? 'active' : '' ?>" href="/SPK_Maintenance/pages/profil.php">⚙️ Profil</a></li>
     <?php endif; ?>
   </ul>
 </div>

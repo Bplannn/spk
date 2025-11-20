@@ -96,7 +96,7 @@
             <div class="title">Profil</div>
             <div class="sub">Akun & pengaturan</div>
           </div>
-          <div class="card-icon">⚙</div>
+          <div class="card-icon">⚙️</div>
         </div>
       </a>
     </div>
@@ -122,6 +122,18 @@
             <div class="sub">Riwayat & hasil perhitungan</div>
           </div>
           <div class="card-icon">★</div>
+        </div>
+      </a>
+    </div>
+    <div class="col-sm-6 col-md-4 mb-3">
+      <a href="profil.php" class="text-decoration-none">
+        <div class="dash-card">
+          <div class="dash-accent accent-yellow"></div>
+          <div>
+            <div class="title">Profil</div>
+            <div class="sub">Akun & pengaturan</div>
+          </div>
+          <div class="card-icon">⚙️</div>
         </div>
       </a>
     </div>
