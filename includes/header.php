@@ -25,7 +25,12 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top no-print">
   <div class="container-fluid">
     <a class="navbar-brand ms-3" href="/SPK_Maintenance/index.php">KeputusanEQU</a>
-    <button class="sidebar-toggle d-md-none" aria-label="Toggle menu">☰</button>
+    <button class="sidebar-toggle d-md-none" aria-label="Toggle menu" title="Menu">
+      <!-- small menu icon (3 bars) -->
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
     <div class="ms-auto text-white">
       <?php if(isset($_SESSION['username'])):
           $displayName = $_SESSION['nama_pengguna'] ?? $_SESSION['username'] ?? '';

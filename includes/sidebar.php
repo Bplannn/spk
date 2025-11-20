@@ -5,7 +5,6 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 <div class="col-2 bg-light sidebar vh-100 p-3 no-print">
   <?php $cur = basename($_SERVER['PHP_SELF']); ?>
   <div class="d-flex align-items-center mb-3">
-    <div style="width:36px;height:36px;background:var(--accent-1);border-radius:8px;margin-right:8px"></div>
     <strong style="color:var(--accent-1)">KeputusanEQU</strong>
   </div>
   <ul class="nav flex-column">

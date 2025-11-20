@@ -17,7 +17,7 @@ $where_sql = '';
 if(count($where)>0) $where_sql = 'WHERE '.implode(' AND ', $where);
 
 // get equipments matching filter
-$sql = "SELECT e.id_equipment, e.equipment_name, e.id_grade, e.id_classification, e.id_inspection_period,
+ $sql = "SELECT e.id_equipment, e.equipment_name, e.inspection_name, e.id_grade, e.id_classification, e.id_inspection_period,
 			   g.grade_point, c.classification_point, ip.period_point
 		  FROM equipment e
 		  LEFT JOIN grade g ON e.id_grade = g.id_grade
@@ -42,6 +42,7 @@ $matrix = [];
 foreach($items as $it){
 	$id = $it['id_equipment'];
 	$matrix[$id]['name'] = $it['equipment_name'];
+	$matrix[$id]['inspection'] = $it['inspection_name'] ?? '';
 	foreach($criteria as $cid=>$meta){
 		$s = $koneksi->prepare("SELECT nilai FROM penilaian WHERE id_equipment=? AND id_criteria=?");
 		$s->bind_param("ii", $id, $cid);
@@ -105,7 +106,7 @@ $purge = !empty($_POST['purge_previous']);
 
 // save results
 foreach($results as $id=>$score){
-	$details = $koneksi->real_escape_string(json_encode(['raw'=>$matrix[$id]['raw'], 'name'=>$matrix[$id]['name']]));
+	$details = $koneksi->real_escape_string(json_encode(['raw'=>$matrix[$id]['raw'], 'name'=>$matrix[$id]['name'], 'inspection'=>($matrix[$id]['inspection'] ?? '')]));
 	$sql = "INSERT INTO compute_results (history_id, id_equipment, score, details) VALUES ($history_id, $id, $score, '$details')";
 	$ok = $koneksi->query($sql);
 	if(!$ok){

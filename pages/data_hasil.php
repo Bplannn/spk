@@ -30,25 +30,30 @@ if (!empty($_GET['history_id'])) {
       $formId = 'delete-form-'.intval($hid);
       echo "<form id='".$formId."' method='POST' action='/SPK_Maintenance/process/delete_history.php' style='display:inline'>";
       echo "<input type='hidden' name='history_id' value='".htmlspecialchars($hid)."'>";
-      echo "<button type='button' data-form='".$formId."' class='btn btn-sm btn-danger ms-2 btn-delete-history'>Hapus History</button>";
+      echo "<button type='button' data-form='".$formId."' class='btn btn-icon btn-sm btn-danger ms-2 btn-delete-history' title='Hapus History'>";
+        echo '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 6v14c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      echo "</button>";
       echo "</form>";
     }
     echo "</div>";
-    echo "<div class='card'><div class='card-body p-0'><table class='table table-bordered mb-0'><thead><tr><th>Rank</th><th>ID</th><th>Equipment</th><th>Score</th></tr></thead><tbody>";
-    // use LEFT JOIN so results remain even if equipment row was deleted; fallback to name stored in details JSON
-    $q = $koneksi->query("SELECT cr.* , e.equipment_name AS live_name FROM compute_results cr LEFT JOIN equipment e ON cr.id_equipment=e.id_equipment WHERE cr.history_id=$hid ORDER BY cr.score DESC");
+    echo "<div class='card'><div class='card-body p-0'><table class='table table-bordered mb-0'><thead><tr><th>Rank</th><th>ID</th><th>Equipment</th><th>Inspection Item</th><th>Score</th></tr></thead><tbody>";
+    // use LEFT JOIN so results remain even if equipment row was deleted; fallback to name and inspection stored in details JSON
+    $q = $koneksi->query("SELECT cr.* , e.equipment_name AS live_name, e.inspection_name AS live_inspection FROM compute_results cr LEFT JOIN equipment e ON cr.id_equipment=e.id_equipment WHERE cr.history_id=$hid ORDER BY cr.score DESC");
     $rank = 1;
     while($row = $q->fetch_assoc()){
       $displayName = '';
+      $displayInspection = '';
       if(!empty($row['live_name'])){
         $displayName = htmlspecialchars($row['live_name']);
+        $displayInspection = htmlspecialchars($row['live_inspection'] ?? '');
       } else {
-        // decode details JSON to get stored name
+        // decode details JSON to get stored name and inspection
         $det = json_decode($row['details'], true);
         if(is_array($det) && !empty($det['name'])) $displayName = htmlspecialchars($det['name']);
         else $displayName = '(deleted)';
+        if(is_array($det) && array_key_exists('inspection', $det)) $displayInspection = htmlspecialchars($det['inspection']);
       }
-      echo "<tr><td>$rank</td><td>".$row['id_equipment']."</td><td>".$displayName."</td><td>".round($row['score'],4)."</td></tr>";
+      echo "<tr><td>$rank</td><td>".$row['id_equipment']."</td><td>".$displayName."</td><td>".$displayInspection."</td><td>".round($row['score'],4)."</td></tr>";
       $rank++;
     }
     echo "</tbody></table></div></div>";
@@ -68,7 +73,9 @@ if (!empty($_GET['history_id'])) {
       echo "<div>";
       echo "<form id='".$fid."' method='POST' action='/SPK_Maintenance/process/delete_history.php' style='margin:0'>";
       echo "<input type='hidden' name='history_id' value='".htmlspecialchars($hh['id_history'])."'>";
-      echo "<button type='button' data-form='".$fid."' class='btn btn-sm btn-danger btn-delete-history'>Hapus</button>";
+      echo "<button type='button' data-form='".$fid."' class='btn btn-icon btn-sm btn-danger btn-delete-history' title='Hapus'>";
+        echo '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 6v14c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      echo "</button>";
       echo "</form>";
       echo "</div>";
     }

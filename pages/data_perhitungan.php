@@ -93,11 +93,13 @@ if($f_plant) $whereClauses[] = "e.id_plant=".(int)$f_plant;
 if($f_classification) $whereClauses[] = "e.id_classification=".(int)$f_classification;
 if($f_period) $whereClauses[] = "e.id_inspection_period=".(int)$f_period;
 if($f_last) $whereClauses[] = "e.id_last_inspection=".(int)$f_last;
+
 $whereSql = count($whereClauses)? 'WHERE '.implode(' AND ', $whereClauses):'';
 
 $q = $koneksi->query("SELECT 
     e.id_equipment,
     e.equipment_name,
+      e.inspection_name,
     g.grade_point,
     c.classification_point,
     ip.period_point
