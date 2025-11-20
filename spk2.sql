@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 20, 2025 at 03:34 AM
+-- Generation Time: Nov 20, 2025 at 03:42 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -103,8 +103,8 @@ INSERT INTO `criteria_weight` (`id_criteria`, `criteria_name`, `weight`, `type`)
 
 CREATE TABLE `equipment` (
   `id_equipment` int(11) NOT NULL,
-  `id_equipment_name` varchar(100) NOT NULL,
-  `id_inspection_name` varchar(100) NOT NULL,
+  `equipment_name` varchar(100) NOT NULL,
+  `inspection_name` varchar(100) NOT NULL,
   `id_grade` int(11) NOT NULL,
   `id_classification` int(11) NOT NULL,
   `id_inspection_period` int(11) NOT NULL,
@@ -116,7 +116,7 @@ CREATE TABLE `equipment` (
 -- Dumping data for table `equipment`
 --
 
-INSERT INTO `equipment` (`id_equipment`, `id_equipment_name`, `id_inspection_name`, `id_grade`, `id_classification`, `id_inspection_period`, `id_last_inspection`, `id_plant`) VALUES
+INSERT INTO `equipment` (`id_equipment`, `equipment_name`, `inspection_name`, `id_grade`, `id_classification`, `id_inspection_period`, `id_last_inspection`, `id_plant`) VALUES
 (1, 'F-1725 Agitator', 'Bottom Bearing Check & Change', 9, 3, 1, 1, 1),
 (2, 'F-1725 Agitator', 'Mechanical seal replace and overhaul', 9, 3, 2, 2, 1),
 (3, 'F-1725 Agitator', 'Middle bearing and chain coupling replace', 9, 3, 3, 3, 1),
@@ -769,7 +769,7 @@ INSERT INTO `equipment` (`id_equipment`, `id_equipment_name`, `id_inspection_nam
 (650, '2F-1725 Agitator', 'Open Manhole and cleaning', 7, 4, 1, 1, 2),
 (651, '2F-1725 Agitator', 'Open Manhole', 7, 4, 1, 1, 2),
 (652, '2F-1725 Agitator', 'Replace gland packing at flush bottom valve', 7, 3, 1, 1, 2);
-INSERT INTO `equipment` (`id_equipment`, `id_equipment_name`, `id_inspection_name`, `id_grade`, `id_classification`, `id_inspection_period`, `id_last_inspection`, `id_plant`) VALUES
+INSERT INTO `equipment` (`id_equipment`, `equipment_name`, `inspection_name`, `id_grade`, `id_classification`, `id_inspection_period`, `id_last_inspection`, `id_plant`) VALUES
 (653, '2F-1725 Agitator', 'Visual inspection', 7, 7, 1, 1, 2),
 (654, '2F-1725 Agitator', 'PT check at Pipe support and baffle support pads', 7, 5, 1, 1, 2),
 (655, '2F-1725 Agitator', 'Open Manhole', 7, 4, 1, 1, 2),
