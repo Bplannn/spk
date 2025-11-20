@@ -25,6 +25,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top no-print">
   <div class="container-fluid">
     <a class="navbar-brand ms-3" href="/SPK_Maintenance/index.php">KeputusanEQU</a>
+    <button class="sidebar-toggle d-md-none" aria-label="Toggle menu">☰</button>
     <div class="ms-auto text-white">
       <?php if(isset($_SESSION['username'])):
           $displayName = $_SESSION['nama_pengguna'] ?? $_SESSION['username'] ?? '';

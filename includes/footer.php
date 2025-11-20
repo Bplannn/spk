@@ -43,6 +43,30 @@ document.addEventListener('DOMContentLoaded', function(){
 		});
 	}
 });
+
+// Sidebar toggle for small screens
+document.addEventListener('DOMContentLoaded', function(){
+	const toggle = document.querySelector('.sidebar-toggle');
+	const sidebar = document.querySelector('.sidebar');
+	if (!toggle || !sidebar) return;
+	// create overlay
+	let overlay = document.createElement('div');
+	overlay.className = 'sidebar-overlay d-none';
+	overlay.style.position = 'fixed';
+	overlay.style.inset = '0';
+	overlay.style.background = 'rgba(0,0,0,0.35)';
+	overlay.style.zIndex = '1040';
+	overlay.style.transition = 'opacity 0.2s ease';
+	document.body.appendChild(overlay);
+
+	function openSidebar(){ sidebar.classList.add('open'); overlay.classList.remove('d-none'); overlay.style.opacity = '1'; }
+	function closeSidebar(){ sidebar.classList.remove('open'); overlay.style.opacity = '0'; setTimeout(()=> overlay.classList.add('d-none'), 200); }
+
+	toggle.addEventListener('click', function(){
+		if (sidebar.classList.contains('open')) closeSidebar(); else openSidebar();
+	});
+	overlay.addEventListener('click', closeSidebar);
+});
 </script>
 <!-- Confirm delete modal -->
 <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="confirmDeleteModalLabel" aria-hidden="true">

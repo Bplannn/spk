@@ -72,6 +72,13 @@ a.card-link:hover .card {
   }
 }
 
+/* overlay helper shown when sidebar open on mobile */
+.sidebar-overlay { display:block; }
+
+/* Make login card and other cards adapt on very small screens */
+.login-card{ max-width:520px; margin:0 auto; }
+.card { word-wrap: break-word; }
+
 @media (min-width: 769px) {
   .sidebar-toggle {
     display: none;
