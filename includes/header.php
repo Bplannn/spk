@@ -30,7 +30,7 @@ if (session_status() === PHP_SESSION_NONE) session_start();
         
         
         
-        $_SESSION['username'])?></strong> (<?=htmlspecialchars($_SESSION['role'])?>)</span>
+        $_SESSION['nama_pengguna'])?></strong> (<?=htmlspecialchars($_SESSION['role'])?>)</span>
         <a href="/SPK_Maintenance/process/logout.php" class="btn btn-sm btn-light">Logout</a>
       <?php else: ?>
         <a href="/SPK_Maintenance/login.php" class="btn btn-sm btn-light">Login</a>
