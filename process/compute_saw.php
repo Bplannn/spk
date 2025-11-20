@@ -12,6 +12,7 @@ if(!empty($_POST['id_grade'])) { $filters['id_grade'] = (int)$_POST['id_grade'];
 if(!empty($_POST['id_plant'])) { $filters['id_plant'] = (int)$_POST['id_plant']; $where[] = "e.id_plant=".$filters['id_plant']; }
 if(!empty($_POST['id_classification'])) { $filters['id_classification'] = (int)$_POST['id_classification']; $where[] = "e.id_classification=".$filters['id_classification']; }
 if(!empty($_POST['id_inspection_period'])) { $filters['id_inspection_period'] = (int)$_POST['id_inspection_period']; $where[] = "e.id_inspection_period=".$filters['id_inspection_period']; }
+if(!empty($_POST['id_last_inspection'])) { $filters['id_last_inspection'] = (int)$_POST['id_last_inspection']; $where[] = "e.id_last_inspection=".$filters['id_last_inspection']; }
 $where_sql = '';
 if(count($where)>0) $where_sql = 'WHERE '.implode(' AND ', $where);
 
@@ -97,9 +98,14 @@ if(!$ins){
 }
 $history_id = $koneksi->insert_id;
 
+// If requested, purge previous results for these equipments before inserting new ones
+$purge = !empty($_POST['purge_previous']);
+// NOTE: when purge is requested we will delete the equipment (and its penilaian)
+// after saving the new compute_results so the results remain in history.
+
 // save results
 foreach($results as $id=>$score){
-	$details = $koneksi->real_escape_string(json_encode(['raw'=>$matrix[$id]['raw']]));
+	$details = $koneksi->real_escape_string(json_encode(['raw'=>$matrix[$id]['raw'], 'name'=>$matrix[$id]['name']]));
 	$sql = "INSERT INTO compute_results (history_id, id_equipment, score, details) VALUES ($history_id, $id, $score, '$details')";
 	$ok = $koneksi->query($sql);
 	if(!$ok){
@@ -109,6 +115,21 @@ foreach($results as $id=>$score){
 	} else {
 		$msg = date('Y-m-d H:i:s') . " | OK INSERT: history={$history_id} id={$id} score={$score}\n";
 		file_put_contents(__DIR__ . '/compute_debug.log', $msg, FILE_APPEND);
+	}
+}
+
+// If purge requested, delete penilaian and equipment rows for computed items
+if($purge){
+	$ids = array_keys($results);
+	if(count($ids)>0){
+		$ids_sql = implode(',', array_map('intval', $ids));
+		// delete penilaian first
+		$del_pen = "DELETE FROM penilaian WHERE id_equipment IN ($ids_sql)";
+		$koneksi->query($del_pen);
+		$del_eq = "DELETE FROM equipment WHERE id_equipment IN ($ids_sql)";
+		$koneksi->query($del_eq);
+		$log = date('Y-m-d H:i:s') . " | PURGE: deleted equipment and penilaian for equipment_ids=($ids_sql)\n";
+		file_put_contents(__DIR__ . '/compute_debug.log', $log, FILE_APPEND);
 	}
 }
 

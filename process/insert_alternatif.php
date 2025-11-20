@@ -1,11 +1,14 @@
 <?php
-include '../config/db.php';
-$query = "SELECT e.id_equipment, e.equipment_name,
-                 g.grade_name, p.plant_name, ip.period_name
+$include_path = '../config/db.php';
+include $include_path;
+$query = "SELECT e.id_equipment, e.equipment_name, e.inspection_name,
+                 g.grade_name, p.plant_name, ip.period_name,
+                 li.year AS last_year
           FROM equipment e
           JOIN grade g ON e.id_grade = g.id_grade
           JOIN plant p ON e.id_plant = p.id_plant
-          JOIN inspection_period ip ON e.id_inspection_period = ip.id_inspection_period";
+          JOIN inspection_period ip ON e.id_inspection_period = ip.id_inspection_period
+          LEFT JOIN last_inspection li ON e.id_last_inspection = li.id_last_inspection";
 $result = mysqli_query($koneksi, $query);
 ?>
 <!DOCTYPE html>
@@ -22,9 +25,10 @@ $result = mysqli_query($koneksi, $query);
       <tr>
         <th>No</th>
         <th>Nama Equipment</th>
-        <th>Kelas</th>
+        <th>Inspection Item</th>
         <th>Grade</th>
         <th>Plant</th>
+        <th>Last Inspection</th>
         <th>Inspection Period</th>
       </tr>
     </thead>
@@ -33,9 +37,10 @@ $result = mysqli_query($koneksi, $query);
       <tr>
         <td><?= $no++ ?></td>
         <td><?= $row['equipment_name'] ?></td>
-        <td><?= $row['class_name'] ?></td>
+        <td><?= $row['inspection_name'] ?></td>
         <td><?= $row['grade_name'] ?></td>
         <td><?= $row['plant_name'] ?></td>
+        <td><?= htmlspecialchars($row['last_year'] ?? '') ?></td>
         <td><?= $row['period_name'] ?></td>
       </tr>
       <?php } ?>

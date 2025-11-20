@@ -10,15 +10,17 @@ if (isset($_POST['simpan'])) {
     exit;
   }
     $equipment_name = $_POST['equipment_name'];
+    $inspection_name = $_POST['inspection_name'];
+    $id_last_inspection = $_POST['id_last_inspection'];
     $id_grade = $_POST['id_grade'];
     $id_plant = $_POST['id_plant'];
     $id_classification = $_POST['id_classification'];
     $id_inspection_period = $_POST['id_inspection_period'];
 
-    $query = "INSERT INTO equipment 
-          (equipment_name, id_grade, id_plant, id_classification, id_inspection_period)
+        $query = "INSERT INTO equipment 
+          (equipment_name, inspection_name, id_last_inspection, id_grade, id_plant, id_classification, id_inspection_period)
           VALUES 
-          ('$equipment_name', '$id_grade', '$id_plant', '$id_classification', '$id_inspection_period')";
+          ('$equipment_name', '$inspection_name', '$id_last_inspection', '$id_grade', '$id_plant', '$id_classification', '$id_inspection_period')";
 
     $result = mysqli_query($koneksi, $query);
 
@@ -56,15 +58,24 @@ if (isset($_POST['simpan'])) {
     }
 }
 
-// === QUERY UNTUK TABEL ===
-$query = "SELECT e.id_equipment, e.equipment_name,
+$search = $_GET['search'] ?? '';
+$whereSql = '';
+if($search){
+  $s = $koneksi->real_escape_string($search);
+  $whereSql = "WHERE (e.equipment_name LIKE '%$s%' OR e.inspection_name LIKE '%$s%')";
+}
+
+$query = "SELECT e.id_equipment, e.equipment_name, e.inspection_name,
                  g.grade_name, p.plant_name,
-                 c.classification_name, ip.period_name
+                 c.classification_name, ip.period_name,
+                 li.year AS last_year
           FROM equipment e
           JOIN grade g ON e.id_grade = g.id_grade
           JOIN plant p ON e.id_plant = p.id_plant
           JOIN classification c ON e.id_classification = c.id_classification
-          JOIN inspection_period ip ON e.id_inspection_period = ip.id_inspection_period";
+          JOIN inspection_period ip ON e.id_inspection_period = ip.id_inspection_period
+          LEFT JOIN last_inspection li ON e.id_last_inspection = li.id_last_inspection
+          $whereSql";
 $result = mysqli_query($koneksi, $query);
 
 // === DROPDOWN DATA RELASI ===
@@ -72,6 +83,7 @@ $grade = mysqli_query($koneksi, "SELECT * FROM grade");
 $plant = mysqli_query($koneksi, "SELECT * FROM plant");
 $classification = mysqli_query($koneksi, "SELECT * FROM classification");
 $inspection_period = mysqli_query($koneksi, "SELECT * FROM inspection_period");
+$last_inspection = mysqli_query($koneksi, "SELECT * FROM last_inspection ORDER BY year DESC");
 ?>
 
 <!DOCTYPE html>
@@ -96,6 +108,10 @@ $inspection_period = mysqli_query($koneksi, "SELECT * FROM inspection_period");
         <div class="col-md-4">
           <label>Nama Equipment</label>
           <input type="text" name="equipment_name" class="form-control" required>
+        </div>
+        <div class="col-md-4">
+          <label>Inspection Item</label>
+          <input type="text" name="inspection_name" class="form-control" required>
         </div>
 
         
@@ -141,6 +157,16 @@ $inspection_period = mysqli_query($koneksi, "SELECT * FROM inspection_period");
             <?php } ?>
           </select>
         </div>
+
+        <div class="col-md-4 mt-3">
+          <label>Last Inspection (Year)</label>
+          <select name="id_last_inspection" class="form-select">
+            <option value="">-- Pilih Tahun --</option>
+            <?php while($rli = mysqli_fetch_assoc($last_inspection)) { ?>
+              <option value="<?= $rli['id_last_inspection'] ?>"><?= $rli['year'] ?></option>
+            <?php } ?>
+          </select>
+        </div>
       </div>
 
       <div class="mt-4">
@@ -152,14 +178,22 @@ $inspection_period = mysqli_query($koneksi, "SELECT * FROM inspection_period");
     <?php endif; ?>
 
     <!-- Tabel Data -->
+    <form method="get" class="mb-3">
+      <div class="input-group">
+        <input type="search" name="search" class="form-control" placeholder="Cari equipment atau inspection item..." value="<?= htmlspecialchars($search ?? '') ?>">
+        <button class="btn btn-outline-secondary" type="submit">Search</button>
+      </div>
+    </form>
     <table class="table table-bordered mt-4">
       <thead class="table-dark">
         <tr>
           <th>No</th>
           <th>Nama Equipment</th>
+          <th>Inspection Item</th>
           <th>Grade</th>
           <th>Plant</th>
           <th>Classification</th>
+          <th>Last Inspection</th>
           <th>Inspection Period</th>
         </tr>
       </thead>
@@ -168,9 +202,11 @@ $inspection_period = mysqli_query($koneksi, "SELECT * FROM inspection_period");
         <tr>
           <td><?= $no++ ?></td>
           <td><?= $row['equipment_name'] ?></td>
+          <td><?= $row['inspection_name'] ?></td>
           <td><?= $row['grade_name'] ?></td>
           <td><?= $row['plant_name'] ?></td>
           <td><?= $row['classification_name'] ?></td>
+          <td><?= htmlspecialchars($row['last_year'] ?? '') ?></td>
           <td><?= $row['period_name'] ?></td>
         </tr>
         <?php } ?>

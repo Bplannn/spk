@@ -12,12 +12,15 @@ $grade = $koneksi->query("SELECT * FROM grade");
 $plant = $koneksi->query("SELECT * FROM plant");
 $classification = $koneksi->query("SELECT * FROM classification");
 $inspection_period = $koneksi->query("SELECT * FROM inspection_period");
+// last inspection years
+$last_inspection = $koneksi->query("SELECT * FROM last_inspection ORDER BY year DESC");
 
 // get current filter values (from GET for preview)
 $f_grade = $_GET['id_grade'] ?? '';
 $f_plant = $_GET['id_plant'] ?? '';
 $f_classification = $_GET['id_classification'] ?? '';
 $f_period = $_GET['id_inspection_period'] ?? '';
+$f_last = $_GET['id_last_inspection'] ?? '';
 ?>
 
 <!-- Filter form (preview) -->
@@ -47,18 +50,29 @@ $f_period = $_GET['id_inspection_period'] ?? '';
     </select>
   </div>
   <div class="col-md-2">
+    <select name="id_last_inspection" class="form-select">
+      <option value="">-- Semua Last Inspection --</option>
+      <?php foreach($last_inspection as $li) { $sel = ($f_last== $li['id_last_inspection'])? 'selected':''; echo "<option value='{$li['id_last_inspection']}' $sel>{$li['year']}</option>"; } ?>
+    </select>
+  </div>
+  <div class="col-md-2">
     <button class="btn btn-secondary">Tampilkan</button>
   </div>
 </form>
 
 <!-- Compute button (admin only) -->
 <?php if(isset($_SESSION['role']) && $_SESSION['role']==='admin'): ?>
-  <form method="post" action="../process/compute_saw.php" class="mb-3">
+    <form method="post" action="../process/compute_saw.php" class="mb-3">
     <input type="hidden" name="id_grade" value="<?=htmlspecialchars($f_grade)?>">
     <input type="hidden" name="id_plant" value="<?=htmlspecialchars($f_plant)?>">
     <input type="hidden" name="id_classification" value="<?=htmlspecialchars($f_classification)?>">
     <input type="hidden" name="id_inspection_period" value="<?=htmlspecialchars($f_period)?>">
-    <button class="btn btn-primary">Hitung (hanya data terfilter)</button>
+    <input type="hidden" name="id_last_inspection" value="<?=htmlspecialchars($f_last)?>">
+      <div class="form-check form-check-inline">
+        <input class="form-check-input" type="checkbox" id="purge_prev" name="purge_previous" value="1">
+        <label class="form-check-label" for="purge_prev">Hapus hasil perhitungan sebelumnya</label>
+      </div>
+      <button class="btn btn-primary">Hitung (hanya data terfilter)</button>
   </form>
 <?php endif; ?>
 
@@ -69,6 +83,7 @@ if($f_grade) $whereClauses[] = "e.id_grade=".(int)$f_grade;
 if($f_plant) $whereClauses[] = "e.id_plant=".(int)$f_plant;
 if($f_classification) $whereClauses[] = "e.id_classification=".(int)$f_classification;
 if($f_period) $whereClauses[] = "e.id_inspection_period=".(int)$f_period;
+if($f_last) $whereClauses[] = "e.id_last_inspection=".(int)$f_last;
 $whereSql = count($whereClauses)? 'WHERE '.implode(' AND ', $whereClauses):'';
 
 $q = $koneksi->query("SELECT 
