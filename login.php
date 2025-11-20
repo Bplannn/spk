@@ -1,22 +1,34 @@
 <?php
-// simple login page (hard-coded users)
 session_start();
+include 'config/db.php';
 $err = '';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $u = $_POST['username'] ?? '';
-    $p = $_POST['password'] ?? '';
-    // hard-coded users: admin/admin, user/user
-    if ($u === 'admin' && $p === 'admin') {
-        $_SESSION['username'] = 'admin';
-        $_SESSION['role'] = 'admin';
+  $u = trim($_POST['username'] ?? '');
+  $p = $_POST['password'] ?? '';
+
+  if ($u === '' || $p === '') {
+    $err = 'Masukkan username dan password.';
+  } else {
+    $stmt = $koneksi->prepare("SELECT id_user, username, nama_pengguna, password, role FROM users WHERE username = ?");
+    $stmt->bind_param('s', $u);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if ($res && $res->num_rows === 1) {
+      $row = $res->fetch_assoc();
+      // password stored as plaintext in this project
+      if ($p === $row['password']) {
+        $_SESSION['id_user'] = $row['id_user'];
+        $_SESSION['username'] = $row['username'];
+        $_SESSION['nama_pengguna'] = $row['nama_pengguna'];
+        $_SESSION['role'] = $row['role'];
         header('Location: pages/dashboard.php'); exit;
-    } elseif ($u === 'user' && $p === 'user') {
-      $_SESSION['username'] = 'user';
-      $_SESSION['role'] = 'user';
-      header('Location: pages/dashboard.php'); exit;
-    } else {
+      } else {
         $err = 'Username atau password salah.';
+      }
+    } else {
+      $err = 'Username tidak ditemukan.';
     }
+  }
 }
 include 'includes/header.php';
 ?>
@@ -43,6 +55,10 @@ include 'includes/header.php';
               <button class="btn btn-primary">Login</button>
             </div>
           </form>
+          <div class="mt-3">
+            <a href="register.php" class="btn btn-outline-secondary w-100">Register</a>
+          </div>
+
           <div class="login-hint mt-3">Gunakan <strong>admin/admin</strong> atau <strong>user/user</strong></div>
         </div>
       </div>
