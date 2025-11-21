@@ -36,24 +36,21 @@ if (!empty($_GET['history_id'])) {
       echo "</form>";
     }
     echo "</div>";
-    echo "<div class='card'><div class='card-body p-0'><table class='table table-bordered mb-0'><thead><tr><th>Rank</th><th>ID</th><th>Equipment</th><th>Inspection Item</th><th>Score</th></tr></thead><tbody>";
-    // use LEFT JOIN so results remain even if equipment row was deleted; fallback to name and inspection stored in details JSON
-    $q = $koneksi->query("SELECT cr.* , e.equipment_name AS live_name, e.inspection_name AS live_inspection FROM compute_results cr LEFT JOIN equipment e ON cr.id_equipment=e.id_equipment WHERE cr.history_id=$hid ORDER BY cr.score DESC");
+    echo "<div class='card'><div class='card-body p-0'><table class='table table-bordered mb-0'><thead><tr><th>Rank</th><th>ID</th><th>Equipment</th><th>Score</th></tr></thead><tbody>";
+    // use LEFT JOIN so results remain even if equipment row was deleted; fallback to name stored in details JSON
+    $q = $koneksi->query("SELECT cr.* , e.equipment_name AS live_name FROM compute_results cr LEFT JOIN equipment e ON cr.id_equipment=e.id_equipment WHERE cr.history_id=$hid ORDER BY cr.score DESC");
     $rank = 1;
     while($row = $q->fetch_assoc()){
       $displayName = '';
-      $displayInspection = '';
       if(!empty($row['live_name'])){
         $displayName = htmlspecialchars($row['live_name']);
-        $displayInspection = htmlspecialchars($row['live_inspection'] ?? '');
       } else {
-        // decode details JSON to get stored name and inspection
+        // decode details JSON to get stored name
         $det = json_decode($row['details'], true);
         if(is_array($det) && !empty($det['name'])) $displayName = htmlspecialchars($det['name']);
         else $displayName = '(deleted)';
-        if(is_array($det) && array_key_exists('inspection', $det)) $displayInspection = htmlspecialchars($det['inspection']);
       }
-      echo "<tr><td>$rank</td><td>".$row['id_equipment']."</td><td>".$displayName."</td><td>".$displayInspection."</td><td>".round($row['score'],4)."</td></tr>";
+      echo "<tr><td>$rank</td><td>".$row['id_equipment']."</td><td>".$displayName."</td><td>".round($row['score'],4)."</td></tr>";
       $rank++;
     }
     echo "</tbody></table></div></div>";
