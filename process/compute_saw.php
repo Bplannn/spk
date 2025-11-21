@@ -91,7 +91,7 @@ foreach($matrix as $id=>$row){
 
 // save history
 $filters_json = $koneksi->real_escape_string(json_encode($filters));
-$user = $koneksi->real_escape_string($_SESSION['username']);
+$user = $koneksi->real_escape_string($_SESSION['nama_pengguna']);
 $ins = $koneksi->query("INSERT INTO compute_history (computed_by, filters) VALUES ('{$user}', '{$filters_json}')");
 if(!$ins){
 	die('Failed saving history: '.$koneksi->error);
