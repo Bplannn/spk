@@ -33,13 +33,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 include 'includes/header.php';
 ?>
 
-<div class="container mt-5">
+<div class="container mt-5 page-login">
   <div class="row align-items-center" style="min-height:65vh">
-    <div class="col-md-7 d-none d-md-block">
-      <h1 style="color:var(--accent-1);font-size:48px;margin-bottom:12px">KeputusanEQU</h1>
-      <p style="color:#6b7785;max-width:640px;line-height:1.6">Aplikasi penunjang keputusan dengan metode SAW. Kelola kriteria, alternatif, dan jalankan perhitungan untuk mendapatkan rekomendasi equipment.</p>
+    <div class="col-md-5 d-none d-md-block hero">
+      <div class="hero-inner">
+        <h1 style="color:var(--accent-1);font-size:48px;margin-bottom:12px">KeputusanEQU</h1>
+        <p style="color:#6b7785;max-width:640px;line-height:1.6">Aplikasi penunjang keputusan dengan metode SAW. Kelola kriteria, alternatif, dan jalankan perhitungan untuk mendapatkan rekomendasi equipment.</p>
+      </div>
     </div>
-    <div class="col-12 col-md-5">
+    <div class="col-12 col-md-7">
       <div class="card login-card p-3">
         <div class="card-body">
           <h4 class="mb-3">Login Account</h4>

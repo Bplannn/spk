@@ -82,8 +82,29 @@ a.card-link:hover .card {
 /* overlay helper shown when sidebar open on mobile */
 .sidebar-overlay { display:block; }
 
-/* Make login card and other cards adapt on very small screens */
 .login-card{ max-width:520px; margin:0 auto; }
+/* Login page small-screen centering and spacing adjustments */
+.page-login{ padding-top:40px; padding-bottom:40px; }
+.page-login .row{ justify-content:center; }
+@media (max-width:576px){
+  .login-card{ width:calc(100% - 24px); margin:12px auto; }
+}
+/* Move hero (title + description) a bit inward from the left edge on larger screens */
+.page-login .hero{ padding-left:24px; padding-right:18px; display:flex; flex-direction:column; justify-content:center; margin-right:12px; }
+.page-login .hero h1{ margin-bottom:12px; max-width:640px; }
+.page-login .hero p{ max-width:640px; color:#6b7785; line-height:1.6 }
+@media (min-width:992px){
+  .page-login .hero{ padding-left:56px; }
+}
+@media (max-width:991px){
+  .page-login .hero{ padding-left:28px; padding-right:12px; }
+}
+
+/* Center the hero block inside its column so text visually moves toward center */
+.page-login .hero-inner{ max-width:560px; margin-left:auto; margin-right:auto; }
+@media (min-width:1200px){
+  .page-login .hero-inner{ max-width:640px; }
+}
 .card { word-wrap: break-word; }
 
 /* Icon-only small buttons (used for edit/delete actions) */
