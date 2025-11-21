@@ -19,7 +19,7 @@
 </style>
 
 <div class="container mt-3">
-  <span class="welcome-pill">Selamat Datang <?=htmlspecialchars($_SESSION['username'] ?? 'Name')?>! Mau lihat apa hari ini?</span>
+  <span class="welcome-pill">Selamat Datang <?=htmlspecialchars($_SESSION['nama_pengguna'] ?? 'Name')?>! Mau lihat apa hari ini?</span>
 
   <div class="row dash-grid">
   <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
