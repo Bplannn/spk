@@ -1,3 +1,4 @@
+
 <?php
 include('../config/db.php');
 include('../includes/header.php');
@@ -32,20 +33,10 @@ include('../includes/sidebar.php');
       } else {
         echo '<div class="alert alert-danger">Kriteria tidak ditemukan.</div>';
       }
-    } else {
+    } 
     ?>
-    <form method="post" action="../process/insert_kriteria.php" class="row g-2 mb-0">
-      <div class="col-md-6"><input name="criteria_name" class="form-control" placeholder="Label (e.g. Classification)" required></div>
-      <div class="col-md-2"><input name="weight" step="0.01" type="number" class="form-control" placeholder="0.25" required></div>
-      <div class="col-md-2">
-        <select name="type" class="form-select">
-          <option value="benefit">Benefit</option>
-          <option value="cost">Cost</option>
-        </select>
-      </div>
-      <div class="col-12"><button class="btn btn-primary mt-2">Simpan Kriteria</button></div>
-    </form>
-    <?php } ?>
+   
+
   </div>
 </div>
 
@@ -64,9 +55,7 @@ include('../includes/sidebar.php');
               echo "<a href='data_kriteria.php?edit={$r['id_criteria']}' class='btn btn-icon btn-sm btn-warning me-1' title='Edit'>";
                 echo '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" stroke="currentColor" stroke-width="0" fill="currentColor"/></svg>';
               echo "</a> ";
-              echo "<a href='../process/delete_kriteria.php?id={$r['id_criteria']}' class='btn btn-icon btn-sm btn-danger' title='Hapus' onclick=\"return confirm('Yakin ingin menghapus data ini?')\">";
-                echo '<svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 6v14c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-              echo "</a></td></tr>";
+             
           $no++;
         }
         ?>
