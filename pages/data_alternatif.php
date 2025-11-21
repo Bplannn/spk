@@ -100,6 +100,18 @@ if (isset($_GET['edit'])) {
   <meta charset="UTF-8">
   <title>Data Alternatif</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    /* Page-scoped: make action buttons sit inline and not overlap */
+    td.actions-cell{white-space:nowrap;padding:8px;vertical-align:middle}
+    td.actions-cell{display:flex;gap:8px;align-items:center;justify-content:center}
+    td.actions-cell .btn-icon{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;padding:6px;border-radius:6px}
+    td.actions-cell .btn-icon svg{width:18px;height:18px}
+    @media(max-width:576px){
+      td.actions-cell{gap:6px}
+      td.actions-cell .btn-icon{width:32px;height:32px}
+      td.actions-cell .btn-icon svg{width:16px;height:16px}
+    }
+  </style>
 </head>
 <body class="p-4">
   <div class="container">
@@ -217,7 +229,7 @@ if (isset($_GET['edit'])) {
           <th>Classification</th>
           <th>Last Inspection</th>
           <th>Inspection Period</th>
-          <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?><th>Aksi</th><?php endif; ?>
+          <?php if(isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?><th style="width:120px">Aksi</th><?php endif; ?>
         </tr>
       </thead>
       <tbody>
