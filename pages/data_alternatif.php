@@ -206,7 +206,7 @@ if (isset($_GET['edit'])) {
       </div>
     </div>
     <?php else: ?>
-      <div class="alert alert-info">Anda login sebagai <strong><?=htmlspecialchars($_SESSION['username'] ?? 'Tamu')?></strong>. Anda hanya dapat melihat data.</div>
+      <div class="alert alert-info">Anda login sebagai <strong><?=htmlspecialchars($_SESSION['role'] ?? 'Tamu')?></strong>. Anda hanya dapat melihat data.</div>
     <?php endif; ?>
 
     <!-- Tabel Data -->
