@@ -21,6 +21,30 @@ if (session_status() === PHP_SESSION_NONE) session_start();
     .navbar .btn-light { background: rgba(255,255,255,0.9); }
   </style>
 </head>
+<!-- Logout Confirmation Modal -->
+<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      
+      <div class="modal-header">
+        <h5 class="modal-title" id="logoutModalLabel">Konfirmasi Logout</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body">
+        Anda yakin ingin logout dari aplikasi?
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Batal</button>
+        <a href="/SPK_Maintenance/process/logout.php" class="btn btn-danger">Logout</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top no-print">
   <div class="container-fluid">
@@ -36,7 +60,10 @@ if (session_status() === PHP_SESSION_NONE) session_start();
           $displayName = $_SESSION['nama_pengguna'] ?? $_SESSION['username'] ?? '';
       ?>
         <span class="me-3">Logged as: <strong><?=htmlspecialchars($displayName)?></strong> (<?=htmlspecialchars($_SESSION['role'] ?? '')?>)</span>
-        <a href="/SPK_Maintenance/process/logout.php" class="btn btn-sm btn-light">Logout</a>
+        <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#logoutModal">
+          Logout
+        </button>
+
       <?php else: ?>
         <a href="/SPK_Maintenance/login.php" class="btn btn-sm btn-light">Login</a>
       <?php endif; ?>
