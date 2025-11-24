@@ -4,6 +4,10 @@ include('../includes/header.php');
 include('../includes/sidebar.php');
 ?>
 
+<?php
+$edit = $_GET['edit'] ?? '';
+$edit_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+?>
 <h3>Data Sub Kriteria</h3>
 
 <div class="row mt-4">
@@ -12,12 +16,23 @@ include('../includes/sidebar.php');
     <div class="card mb-3">
       <div class="card-body">
         <h5 class="card-title">Grade</h5>
+        <?php
+        $g_name = '';
+        $g_point = '';
+        $g_id = 0;
+        if($edit === 'grade' && $edit_id){
+          $grr = $koneksi->query("SELECT * FROM grade WHERE id_grade = " . $edit_id);
+          if($grr && $grr->num_rows){ $grr = $grr->fetch_assoc(); $g_name = $grr['grade_name']; $g_point = $grr['grade_point']; $g_id = $grr['id_grade']; }
+        }
+        ?>
         <form action="../process/insert_subkriteria.php" method="post" class="input-group mb-2">
           <input type="hidden" name="target" value="grade">
-          <input name="name" class="form-control" placeholder="Grade name (A)">
-          <input name="point" type="number" class="form-control" placeholder="Point (5)">
-          <button class="btn btn-success">Tambah</button>
+          <?php if($g_id): ?><input type="hidden" name="id" value="<?= $g_id ?>"><?php endif; ?>
+          <input name="name" class="form-control" placeholder="Grade name (A)" value="<?= htmlspecialchars($g_name) ?>">
+          <input name="point" type="number" class="form-control" placeholder="Point (5)" value="<?= htmlspecialchars($g_point) ?>">
+          <button class="btn btn-<?= $g_id ? 'primary' : 'success' ?>"><?= $g_id ? 'Update' : 'Tambah' ?></button>
         </form>
+        <?php if($g_id): ?><a href="data_subkriteria.php" class="btn btn-sm btn-outline-secondary mb-2">Cancel edit</a><?php endif; ?>
         <table class="table table-sm">
           <thead><tr><th>Grade</th><th>Point</th><th>Aksi</th></tr></thead>
           <tbody>
@@ -47,12 +62,23 @@ include('../includes/sidebar.php');
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Inspection Period</h5>
+        <?php
+        $p_name = '';
+        $p_point = '';
+        $p_id = 0;
+        if($edit === 'inspection_period' && $edit_id){
+          $prr = $koneksi->query("SELECT * FROM inspection_period WHERE id_inspection_period = " . $edit_id);
+          if($prr && $prr->num_rows){ $prr = $prr->fetch_assoc(); $p_name = $prr['period_name']; $p_point = $prr['period_point']; $p_id = $prr['id_inspection_period']; }
+        }
+        ?>
         <form action="../process/insert_subkriteria.php" method="post" class="input-group mb-2">
           <input type="hidden" name="target" value="inspection_period">
-          <input name="name" class="form-control" placeholder="Period name (2-4)">
-          <input name="point" type="number" class="form-control" placeholder="Point (5)">
-          <button class="btn btn-success">Tambah</button>
+          <?php if($p_id): ?><input type="hidden" name="id" value="<?= $p_id ?>"><?php endif; ?>
+          <input name="name" class="form-control" placeholder="Period name (2-4)" value="<?= htmlspecialchars($p_name) ?>">
+          <input name="point" type="number" class="form-control" placeholder="Point (5)" value="<?= htmlspecialchars($p_point) ?>">
+          <button class="btn btn-<?= $p_id ? 'primary' : 'success' ?>"><?= $p_id ? 'Update' : 'Tambah' ?></button>
         </form>
+        <?php if($p_id): ?><a href="data_subkriteria.php" class="btn btn-sm btn-outline-secondary mb-2">Cancel edit</a><?php endif; ?>
         <table class="table table-sm">
           <thead><tr><th>Period</th><th>Point</th><th>Aksi</th></tr></thead>
           <tbody>
@@ -84,12 +110,23 @@ include('../includes/sidebar.php');
     <div class="card">
       <div class="card-body">
         <h5 class="card-title">Classification</h5>
+        <?php
+        $c_name = '';
+        $c_point = '';
+        $c_id = 0;
+        if($edit === 'classification' && $edit_id){
+          $crr = $koneksi->query("SELECT * FROM classification WHERE id_classification = " . $edit_id);
+          if($crr && $crr->num_rows){ $crr = $crr->fetch_assoc(); $c_name = $crr['classification_name']; $c_point = $crr['classification_point']; $c_id = $crr['id_classification']; }
+        }
+        ?>
         <form action="../process/insert_subkriteria.php" method="post" class="input-group mb-2">
           <input type="hidden" name="target" value="classification">
-          <input name="name" class="form-control" placeholder="Classification name (Rotating work)">
-          <input name="point" type="number" class="form-control" placeholder="Point (4)">
-          <button class="btn btn-success">Tambah</button>
+          <?php if($c_id): ?><input type="hidden" name="id" value="<?= $c_id ?>"><?php endif; ?>
+          <input name="name" class="form-control" placeholder="Classification name (Rotating work)" value="<?= htmlspecialchars($c_name) ?>">
+          <input name="point" type="number" class="form-control" placeholder="Point (4)" value="<?= htmlspecialchars($c_point) ?>">
+          <button class="btn btn-<?= $c_id ? 'primary' : 'success' ?>"><?= $c_id ? 'Update' : 'Tambah' ?></button>
         </form>
+        <?php if($c_id): ?><a href="data_subkriteria.php" class="btn btn-sm btn-outline-secondary mb-2">Cancel edit</a><?php endif; ?>
         <table class="table table-sm">
           <thead><tr><th>Classification</th><th>Point</th><th>Aksi</th></tr></thead>
           <tbody>
