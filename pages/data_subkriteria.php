@@ -32,7 +32,7 @@ $edit_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
           <input name="point" type="number" class="form-control" placeholder="Point (5)" value="<?= htmlspecialchars($g_point) ?>">
           <button class="btn btn-<?= $g_id ? 'primary' : 'success' ?>"><?= $g_id ? 'Update' : 'Tambah' ?></button>
         </form>
-        <?php if($g_id): ?><a href="data_subkriteria.php" class="btn btn-sm btn-outline-secondary mb-2">Cancel edit</a><?php endif; ?>
+        <?php if($g_id): ?><a href="data_subkriteria.php" class="btn btn-sm btn-outline-danger mb-2">Batal edit</a><?php endif; ?>
         <table class="table table-sm">
           <thead><tr><th>Grade</th><th>Point</th><th>Aksi</th></tr></thead>
           <tbody>
@@ -47,9 +47,7 @@ $edit_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
                 <a href="data_subkriteria.php?edit=grade&id=<?= $g['id_grade'] ?>" class="btn btn-icon btn-sm btn-warning" title="Edit">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" stroke="currentColor" stroke-width="0" fill="currentColor"/></svg>
                 </a>
-                <a href="../process/delete_subkriteria.php?target=grade&id=<?= $g['id_grade'] ?>" class="btn btn-icon btn-sm btn-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus grade ini?')">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 6v14c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
+                
               </td>
             </tr>
           <?php endwhile; ?>
@@ -78,7 +76,7 @@ $edit_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
           <input name="point" type="number" class="form-control" placeholder="Point (5)" value="<?= htmlspecialchars($p_point) ?>">
           <button class="btn btn-<?= $p_id ? 'primary' : 'success' ?>"><?= $p_id ? 'Update' : 'Tambah' ?></button>
         </form>
-        <?php if($p_id): ?><a href="data_subkriteria.php" class="btn btn-sm btn-outline-secondary mb-2">Cancel edit</a><?php endif; ?>
+        <?php if($p_id): ?><a href="data_subkriteria.php" class="btn btn-sm btn-outline-danger mb-2">Batal edit</a><?php endif; ?>
         <table class="table table-sm">
           <thead><tr><th>Period</th><th>Point</th><th>Aksi</th></tr></thead>
           <tbody>
@@ -93,9 +91,7 @@ $edit_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
                 <a href="data_subkriteria.php?edit=inspection_period&id=<?= $p['id_inspection_period'] ?>" class="btn btn-icon btn-sm btn-warning" title="Edit">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" stroke="currentColor" stroke-width="0" fill="currentColor"/></svg>
                 </a>
-                <a href="../process/delete_subkriteria.php?target=inspection_period&id=<?= $p['id_inspection_period'] ?>" class="btn btn-icon btn-sm btn-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus period ini?')">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 6v14c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
+                
               </td>
             </tr>
           <?php endwhile; ?>
@@ -126,7 +122,7 @@ $edit_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
           <input name="point" type="number" class="form-control" placeholder="Point (4)" value="<?= htmlspecialchars($c_point) ?>">
           <button class="btn btn-<?= $c_id ? 'primary' : 'success' ?>"><?= $c_id ? 'Update' : 'Tambah' ?></button>
         </form>
-        <?php if($c_id): ?><a href="data_subkriteria.php" class="btn btn-sm btn-outline-secondary mb-2">Cancel edit</a><?php endif; ?>
+        <?php if($c_id): ?><a href="data_subkriteria.php" class="btn btn-sm btn-outline-danger mb-2">Batal edit</a><?php endif; ?>
         <table class="table table-sm">
           <thead><tr><th>Classification</th><th>Point</th><th>Aksi</th></tr></thead>
           <tbody>
@@ -141,9 +137,7 @@ $edit_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
                 <a href="data_subkriteria.php?edit=classification&id=<?= $c['id_classification'] ?>" class="btn btn-icon btn-sm btn-warning" title="Edit">
                   <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25z" stroke="currentColor" stroke-width="0" fill="currentColor"/></svg>
                 </a>
-                <a href="../process/delete_subkriteria.php?target=classification&id=<?= $c['id_classification'] ?>" class="btn btn-icon btn-sm btn-danger" title="Hapus" onclick="return confirm('Yakin ingin menghapus classification ini?')">
-                  <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M8 6v14c0 1.1.9 2 2 2h4c1.1 0 2-.9 2-2V6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                </a>
+                
               </td>
             </tr>
           <?php endwhile; ?>

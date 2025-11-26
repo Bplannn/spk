@@ -4,7 +4,7 @@ include('../config/db.php'); include('../includes/header.php'); include('../incl
 
 <div class="container mt-4">
   <h3>Hasil Perhitungan</h3>
-  <span class="welcome-pill">Lihat riwayat perhitungan dan cetak hasil</span>
+  <span class="welcome-pill no-print">Lihat riwayat perhitungan dan cetak hasil</span>
 
 <?php
 // Flash messages
