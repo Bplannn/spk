@@ -1,10 +1,10 @@
 <?php
 /**
  * Test SAW (Simple Additive Weighting) Calculation
- * 
+ *
  * This script tests the SAW calculation logic to verify correctness
  * of the normalization and weighted scoring algorithms.
- * 
+ *
  * Usage: php tools/test_saw_calculation.php
  */
 
@@ -205,10 +205,16 @@ function run_test() {
     $benefit_test_passed = true;
     foreach ($test_criteria as $cid => $c) {
         if ($c['type'] === 'benefit') {
-            $values = array_map(fn($eq) => $eq['raw'][$cid], $test_equipment);
-            $max_idx = array_search(max($values), $values);
-            $eq_with_max = $test_equipment[$max_idx];
-            if (abs($normalized[$eq_with_max['id']][$cid] - 1.0) >= 0.001) {
+            $max_val = max(array_map(fn($eq) => $eq['raw'][$cid], $test_equipment));
+            // Find first equipment with max value
+            $eq_with_max = null;
+            foreach ($test_equipment as $eq) {
+                if ($eq['raw'][$cid] === $max_val) {
+                    $eq_with_max = $eq;
+                    break;
+                }
+            }
+            if ($eq_with_max && abs($normalized[$eq_with_max['id']][$cid] - 1.0) >= 0.001) {
                 $benefit_test_passed = false;
                 break;
             }
@@ -226,10 +232,16 @@ function run_test() {
     $cost_test_passed = true;
     foreach ($test_criteria as $cid => $c) {
         if ($c['type'] === 'cost') {
-            $values = array_map(fn($eq) => $eq['raw'][$cid], $test_equipment);
-            $min_idx = array_search(min($values), $values);
-            $eq_with_min = $test_equipment[$min_idx];
-            if (abs($normalized[$eq_with_min['id']][$cid] - 1.0) >= 0.001) {
+            $min_val = min(array_map(fn($eq) => $eq['raw'][$cid], $test_equipment));
+            // Find first equipment with min value
+            $eq_with_min = null;
+            foreach ($test_equipment as $eq) {
+                if ($eq['raw'][$cid] === $min_val) {
+                    $eq_with_min = $eq;
+                    break;
+                }
+            }
+            if ($eq_with_min && abs($normalized[$eq_with_min['id']][$cid] - 1.0) >= 0.001) {
                 $cost_test_passed = false;
                 break;
             }
